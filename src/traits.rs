@@ -24,6 +24,7 @@ use Result;
 ///     bar: String,
 ///     baz: usize
 /// }
+/// impl FromToml for Foo {}
 ///
 /// # fn main() {
 /// // Converts from the TOML string to a `Foo` value.
@@ -62,7 +63,6 @@ pub trait FromToml: for<'a> Deserialize<'a> {
         Ok(this)
     }
 }
-impl<T> FromToml for T where T: for<'a> Deserialize<'a> {}
 
 /// This trait allows to convert serializable values to TOML objects.
 ///
@@ -82,6 +82,7 @@ impl<T> FromToml for T where T: for<'a> Deserialize<'a> {}
 ///     bar: &'static str,
 ///     baz: usize
 /// }
+/// impl ToToml for Foo {}
 ///
 /// # fn main() {
 /// // Converts the `Foo` value to a TOML string.
@@ -119,4 +120,3 @@ pub trait ToToml: Serialize {
         Ok(toml)
     }
 }
-impl<T> ToToml for T where T: Serialize {}
