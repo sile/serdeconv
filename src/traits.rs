@@ -1,7 +1,6 @@
 use std::io::{Read, Write};
 use std::path::Path;
 use serde::{Deserialize, Serialize};
-use toml;
 
 use Result;
 
@@ -52,9 +51,9 @@ pub trait FromToml: for<'a> Deserialize<'a> {
         track!(::from_toml_str(toml))
     }
 
-    /// Converts from the TOML value to an instance of this implementation.
-    fn from_toml(toml: toml::Value) -> Result<Self> {
-        track!(::from_toml(toml))
+    /// Converts from the TOML bytes to an instance of this implementation.
+    fn from_toml_slice(toml: &[u8]) -> Result<Self> {
+        track!(::from_toml_slice(toml))
     }
 }
 
@@ -102,10 +101,5 @@ pub trait ToToml: Serialize {
     /// Converts this to a TOML string.
     fn to_toml_string(&self) -> Result<String> {
         track!(::to_toml_string(self))
-    }
-
-    /// Converts this to a TOML value.
-    fn to_toml(&self) -> Result<toml::Value> {
-        track!(::to_toml(self))
     }
 }

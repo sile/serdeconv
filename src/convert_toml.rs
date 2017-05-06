@@ -6,7 +6,7 @@ use toml;
 
 use Result;
 
-/// Converts from the TOML file to an instance of `T`.
+/// Converts from the TOML file to a value of `T` type.
 pub fn from_toml_file<T, P>(path: P) -> Result<T>
     where T: for<'a> Deserialize<'a>,
           P: AsRef<Path>
@@ -15,7 +15,7 @@ pub fn from_toml_file<T, P>(path: P) -> Result<T>
     track!(from_toml_reader(f))
 }
 
-/// Reads a TOML string from the reader and converts it to an instance of `T`.
+/// Reads a TOML string from the reader and converts it to a value of `T` type.
 pub fn from_toml_reader<T, R>(mut reader: R) -> Result<T>
     where T: for<'a> Deserialize<'a>,
           R: Read
@@ -25,7 +25,7 @@ pub fn from_toml_reader<T, R>(mut reader: R) -> Result<T>
     track!(from_toml_str(&toml))
 }
 
-/// Converts from the TOML string to an instance of `T`.
+/// Converts from the TOML string to a value of `T` type.
 ///
 /// # Examples
 ///
@@ -56,16 +56,16 @@ pub fn from_toml_reader<T, R>(mut reader: R) -> Result<T>
 pub fn from_toml_str<T>(toml: &str) -> Result<T>
     where T: for<'a> Deserialize<'a>
 {
-    let this = track_try!(toml::from_str(toml));
-    Ok(this)
+    let value = track_try!(toml::from_str(toml));
+    Ok(value)
 }
 
-/// Converts from the TOML value to an instance of `T`.
-pub fn from_toml<T>(toml: toml::Value) -> Result<T>
+/// Converts from the TOML bytes to a value of `T` type.
+pub fn from_toml_slice<T>(toml: &[u8]) -> Result<T>
     where T: for<'a> Deserialize<'a>
 {
-    let this = track_try!(toml.try_into());
-    Ok(this)
+    let value = track_try!(toml::from_slice(toml));
+    Ok(value)
 }
 
 /// Converts the value to a TOML string and writes it to the speficied file.
@@ -118,13 +118,5 @@ pub fn to_toml_string<T>(value: &T) -> Result<String>
     where T: ?Sized + Serialize
 {
     let toml = track_try!(toml::to_string(value));
-    Ok(toml)
-}
-
-/// Converts the value to a TOML value.
-pub fn to_toml<T>(value: &T) -> Result<toml::Value>
-    where T: ?Sized + Serialize
-{
-    let toml = track_try!(toml::Value::try_from(value));
     Ok(toml)
 }
