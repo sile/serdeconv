@@ -45,7 +45,7 @@ pub use convert_json::{to_json_string, to_json_writer, to_json_file, to_json_str
 pub use convert_toml::{from_toml_str, from_toml_slice, from_toml_reader, from_toml_file};
 pub use convert_toml::{to_toml_string, to_toml_writer, to_toml_file};
 pub use error::{Error, ErrorKind};
-pub use traits::{FromToml, ToToml};
+pub use traits::{FromToml, ToToml, FromJson, ToJson};
 
 mod convert_json;
 mod convert_toml;

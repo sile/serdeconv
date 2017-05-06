@@ -15,6 +15,7 @@ travis-ci = {repository = "sile/serdeconv"}
 
 [dependencies]
 serde = "1"
+serde_json = "1"
 toml = "0.4"
 trackable = "0.1"
 

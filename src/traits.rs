@@ -103,3 +103,110 @@ pub trait ToToml: Serialize {
         track!(::to_toml_string(self))
     }
 }
+
+/// This trait allows to convert JSON objects to deserializable values.
+///
+/// # Examples
+///
+/// ```
+/// extern crate serde;
+/// #[macro_use]
+/// extern crate serde_derive;
+/// extern crate serdeconv;
+///
+/// use serdeconv::FromJson;
+///
+/// // Defines a deserializable struct.
+/// #[derive(Deserialize)]
+/// struct Foo {
+///     bar: String,
+///     baz: usize
+/// }
+/// impl FromJson for Foo {}
+///
+/// # fn main() {
+/// // Converts from the JSON string to a `Foo` value.
+/// let json = r#"{
+///     "bar": "aaa",
+///     "baz": 123
+/// }"#;
+/// let foo = Foo::from_json_str(json).unwrap();
+/// assert_eq!(foo.bar, "aaa");
+/// assert_eq!(foo.baz, 123);
+/// # }
+/// ```
+pub trait FromJson: for<'a> Deserialize<'a> {
+    /// Converts from the JSON file to an instance of this implementation.
+    fn from_json_file<P: AsRef<Path>>(path: P) -> Result<Self> {
+        track!(::from_json_file(path))
+    }
+
+    /// Reads a JSON string from the reader and converts it to an instance of this implementation.
+    fn from_json_reader<R: Read>(reader: R) -> Result<Self> {
+        track!(::from_json_reader(reader))
+    }
+
+    /// Converts from the JSON string to an instance of this implementation.
+    fn from_json_str(json: &str) -> Result<Self> {
+        track!(::from_json_str(json))
+    }
+
+    /// Converts from the JSON bytes to an instance of this implementation.
+    fn from_json_slice(json: &[u8]) -> Result<Self> {
+        track!(::from_json_slice(json))
+    }
+}
+
+/// This trait allows to convert serializable values to JSON objects.
+///
+/// # Examples
+///
+/// ```
+/// extern crate serde;
+/// #[macro_use]
+/// extern crate serde_derive;
+/// extern crate serdeconv;
+///
+/// use serdeconv::ToJson;
+///
+/// // Defines a serializable struct.
+/// #[derive(Serialize)]
+/// struct Foo {
+///     bar: &'static str,
+///     baz: usize
+/// }
+/// impl ToJson for Foo {}
+///
+/// # fn main() {
+/// // Converts the `Foo` value to a JSON string.
+/// let foo = Foo { bar: "aaa", baz: 123 };
+/// let json = foo.to_json_string().unwrap();
+/// assert_eq!(json, r#"{"bar":"aaa","baz":123}"#);
+/// # }
+/// ```
+pub trait ToJson: Serialize {
+    /// Converts this to a JSON string and writes it to the speficied file.
+    fn to_json_file<P: AsRef<Path>>(&self, path: P) -> Result<()> {
+        track!(::to_json_file(self, path))
+    }
+
+    /// Converts this to a JSON string and writes it to the writer.
+    fn to_json_writer<W: Write>(&self, writer: W) -> Result<()> {
+        track!(::to_json_writer(self, writer))
+    }
+
+    /// Converts this to a pretty printed JSON string and writes it to the writer.
+    fn to_json_writer_pretty<W: Write>(&self, writer: W) -> Result<()> {
+        track!(::to_json_writer_pretty(self, writer))
+    }
+
+    /// Converts this to a JSON string.
+    fn to_json_string(&self) -> Result<String> {
+        track!(::to_json_string(self))
+    }
+
+    /// Converts this to a pretty printed JSON string.
+    fn to_json_string_pretty(&self) -> Result<String> {
+        track!(::to_json_string_pretty(self))
+    }
+}

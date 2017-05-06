@@ -1,4 +1,5 @@
 use std::io;
+use serde_json;
 use toml;
 use trackable::error::{TrackableError, IntoTrackableError};
 use trackable::error::{ErrorKind as TrackableErrorKind, ErrorKindExt};
@@ -29,6 +30,11 @@ impl IntoTrackableError<toml::de::Error> for ErrorKind {
 }
 impl IntoTrackableError<toml::ser::Error> for ErrorKind {
     fn into_trackable_error(e: toml::ser::Error) -> Error {
+        ErrorKind::Invalid.cause(e)
+    }
+}
+impl IntoTrackableError<serde_json::Error> for ErrorKind {
+    fn into_trackable_error(e: serde_json::Error) -> Error {
         ErrorKind::Invalid.cause(e)
     }
 }
