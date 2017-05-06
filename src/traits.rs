@@ -210,3 +210,40 @@ pub trait ToJson: Serialize {
         track!(::to_json_string_pretty(self))
     }
 }
+
+/// This trait allows to convert MessagePack binaries to deserializable values.
+pub trait FromMsgPack: for<'a> Deserialize<'a> {
+    /// Converts from the MessagePack file to an instance of this implementation.
+    fn from_msgpack_file<P: AsRef<Path>>(path: P) -> Result<Self> {
+        track!(::from_msgpack_file(path))
+    }
+
+    /// Reads a MessagePack bytes from the reader and
+    /// converts it to an instance of this implementation.
+    fn from_msgpack_reader<R: Read>(reader: R) -> Result<Self> {
+        track!(::from_msgpack_reader(reader))
+    }
+
+    /// Converts from the MessagePack bytes to an instance of this implementation.
+    fn from_msgpack_slice(toml: &[u8]) -> Result<Self> {
+        track!(::from_msgpack_slice(toml))
+    }
+}
+
+/// This trait allows to convert serializable values to MessagePack binaries.
+pub trait ToMsgPack: Serialize {
+    /// Converts this to a MessagePack bytes and writes it to the speficied file.
+    fn to_msgpack_file<P: AsRef<Path>>(&self, path: P) -> Result<()> {
+        track!(::to_msgpack_file(self, path))
+    }
+
+    /// Converts this to a MessagePack bytes and writes it to the writer.
+    fn to_msgpack_writer<W: Write>(&self, writer: W) -> Result<()> {
+        track!(::to_msgpack_writer(self, writer))
+    }
+
+    /// Converts this to a MessagePack bytes.
+    fn to_msgpack_vec(&self) -> Result<Vec<u8>> {
+        track!(::to_msgpack_vec(self))
+    }
+}
