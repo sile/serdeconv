@@ -2,6 +2,16 @@
 name = "tomlconv"
 version = "0.1.0"
 authors = ["Takeru Ohta <phjgt308@gmail.com>"]
+description = "This crate provides convenient traits for converting between TOML and serializable values"
+documentation = "https://docs.rs/tomlconv"
+homepage = "https://github.com/sile/tomlconv"
+repository = "https://github.com/sile/tomlconv"
+readme = "README.md"
+keywords = ["toml"]
+license = "MIT"
+
+[badges]
+travis-ci = {repository = "sile/tomlconv"}
 
 [dependencies]
 serde = "1"
