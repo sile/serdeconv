@@ -18,7 +18,6 @@
 //!     bar: String,
 //!     baz: usize
 //! }
-//! impl FromToml for Foo {}
 //!
 //! # fn main() {
 //! // Converts from the TOML string to a `Foo` value.
