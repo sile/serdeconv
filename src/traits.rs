@@ -13,9 +13,9 @@ use Result;
 /// extern crate serde;
 /// #[macro_use]
 /// extern crate serde_derive;
-/// extern crate tomlconv;
+/// extern crate serdeconv;
 ///
-/// use tomlconv::FromToml;
+/// use serdeconv::FromToml;
 ///
 /// // Defines a deserializable struct.
 /// #[derive(Deserialize)]
@@ -66,9 +66,9 @@ pub trait FromToml: for<'a> Deserialize<'a> {
 /// extern crate serde;
 /// #[macro_use]
 /// extern crate serde_derive;
-/// extern crate tomlconv;
+/// extern crate serdeconv;
 ///
-/// use tomlconv::ToToml;
+/// use serdeconv::ToToml;
 ///
 /// // Defines a serializable struct.
 /// #[derive(Serialize)]

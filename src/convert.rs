@@ -33,7 +33,7 @@ pub fn from_toml_reader<T, R>(mut reader: R) -> Result<T>
 /// extern crate serde;
 /// #[macro_use]
 /// extern crate serde_derive;
-/// extern crate tomlconv;
+/// extern crate serdeconv;
 ///
 /// // Defines a deserializable struct.
 /// #[derive(Deserialize)]
@@ -48,7 +48,7 @@ pub fn from_toml_reader<T, R>(mut reader: R) -> Result<T>
 /// bar = "aaa"
 /// baz = 123
 /// "#;
-/// let foo: Foo = tomlconv::from_toml_str(toml).unwrap();
+/// let foo: Foo = serdeconv::from_toml_str(toml).unwrap();
 /// assert_eq!(foo.bar, "aaa");
 /// assert_eq!(foo.baz, 123);
 /// # }
@@ -95,7 +95,7 @@ pub fn to_toml_writer<T, W>(value: &T, mut writer: W) -> Result<()>
 /// extern crate serde;
 /// #[macro_use]
 /// extern crate serde_derive;
-/// extern crate tomlconv;
+/// extern crate serdeconv;
 ///
 /// // Defines a serializable struct.
 /// #[derive(Serialize)]
@@ -107,7 +107,7 @@ pub fn to_toml_writer<T, W>(value: &T, mut writer: W) -> Result<()>
 /// # fn main() {
 /// // Converts the `Foo` value to a TOML string.
 /// let foo = Foo { bar: "aaa", baz: 123 };
-/// let toml = tomlconv::to_toml_string(&foo).unwrap();
+/// let toml = serdeconv::to_toml_string(&foo).unwrap();
 /// assert_eq!(toml, "\
 /// bar = \"aaa\"
 /// baz = 123

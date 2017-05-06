@@ -1,17 +1,17 @@
 [package]
-name = "tomlconv"
+name = "serdeconv"
 version = "0.1.2"
 authors = ["Takeru Ohta <phjgt308@gmail.com>"]
 description = "This crate provides convenient traits and functions for converting between TOML and serializable values"
-documentation = "https://docs.rs/tomlconv"
-homepage = "https://github.com/sile/tomlconv"
-repository = "https://github.com/sile/tomlconv"
+documentation = "https://docs.rs/serdeconv"
+homepage = "https://github.com/sile/serdeconv"
+repository = "https://github.com/sile/serdeconv"
 readme = "README.md"
 keywords = ["toml"]
 license = "MIT"
 
 [badges]
-travis-ci = {repository = "sile/tomlconv"}
+travis-ci = {repository = "sile/serdeconv"}
 
 [dependencies]
 serde = "1"

@@ -9,9 +9,9 @@
 //! extern crate serde;
 //! #[macro_use]
 //! extern crate serde_derive;
-//! extern crate tomlconv;
+//! extern crate serdeconv;
 //!
-//! use tomlconv::FromToml;
+//! use serdeconv::FromToml;
 //!
 //! // Defines a deserializable struct.
 //! #[derive(Deserialize)]
