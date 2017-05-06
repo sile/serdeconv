@@ -1,0 +1,9 @@
+[package]
+name = "tomlconv"
+version = "0.1.0"
+authors = ["Takeru Ohta <phjgt308@gmail.com>"]
+
+[dependencies]
+serde = "1"
+toml = "0.4"
+trackable = "0.1"
