@@ -1,3 +1,5 @@
+//! This crate provides convenient traits for converting between TOML and serializable values.
+#![warn(missing_docs)]
 extern crate serde;
 extern crate toml;
 #[macro_use]
