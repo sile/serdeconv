@@ -25,8 +25,8 @@ pub fn from_msgpack_reader<T, R>(reader: R) -> Result<T>
 }
 
 /// Converts from the MessagePack bytes to a value of `T` type.
-pub fn from_msgpack_slice<T>(bytes: &[u8]) -> Result<T>
-    where T: for<'a> Deserialize<'a>
+pub fn from_msgpack_slice<'a, T>(bytes: &'a [u8]) -> Result<T>
+    where T: Deserialize<'a>
 {
     let value = track_try!(rmp_serde::from_slice(bytes));
     Ok(value)

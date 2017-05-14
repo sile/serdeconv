@@ -53,16 +53,16 @@ pub fn from_toml_reader<T, R>(mut reader: R) -> Result<T>
 /// assert_eq!(foo.baz, 123);
 /// # }
 /// ```
-pub fn from_toml_str<T>(toml: &str) -> Result<T>
-    where T: for<'a> Deserialize<'a>
+pub fn from_toml_str<'a, T>(toml: &'a str) -> Result<T>
+    where T: Deserialize<'a>
 {
     let value = track_try!(toml::from_str(toml));
     Ok(value)
 }
 
 /// Converts from the TOML bytes to a value of `T` type.
-pub fn from_toml_slice<T>(toml: &[u8]) -> Result<T>
-    where T: for<'a> Deserialize<'a>
+pub fn from_toml_slice<'a, T>(toml: &'a [u8]) -> Result<T>
+    where T: Deserialize<'a>
 {
     let value = track_try!(toml::from_slice(toml));
     Ok(value)

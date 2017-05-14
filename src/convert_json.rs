@@ -24,23 +24,21 @@ pub fn from_json_reader<T, R>(reader: R) -> Result<T>
     Ok(value)
 }
 
-
 /// Converts from the JSON string to a value of `T` type.
-pub fn from_json_str<T>(json: &str) -> Result<T>
-    where T: for<'a> Deserialize<'a>
+pub fn from_json_str<'a, T>(json: &'a str) -> Result<T>
+    where T: Deserialize<'a>
 {
     let value = track_try!(serde_json::from_str(json));
     Ok(value)
 }
 
 /// Converts from the JSON bytes to a value of `T` type.
-pub fn from_json_slice<T>(json: &[u8]) -> Result<T>
-    where T: for<'a> Deserialize<'a>
+pub fn from_json_slice<'a, T>(json: &'a [u8]) -> Result<T>
+    where T: Deserialize<'a>
 {
     let value = track_try!(serde_json::from_slice(json));
     Ok(value)
 }
-
 
 /// Converts the value to a JSON string and writes it to the speficied file.
 pub fn to_json_file<T, P>(value: &T, path: P) -> Result<()>
