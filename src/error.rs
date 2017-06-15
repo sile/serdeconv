@@ -2,12 +2,43 @@ use std::io;
 use serde_json;
 use rmp_serde;
 use toml;
-use trackable::error::{TrackableError, IntoTrackableError};
+use trackable::error::TrackableError;
 use trackable::error::{ErrorKind as TrackableErrorKind, ErrorKindExt};
 
 /// The error type for this crate.
-pub type Error = TrackableError<ErrorKind>;
-
+#[derive(Debug, Clone)]
+pub struct Error(TrackableError<ErrorKind>);
+derive_traits_for_trackable_error_newtype!(Error, ErrorKind);
+impl From<io::Error> for Error {
+    fn from(f: io::Error) -> Self {
+        ErrorKind::Other.cause(f).into()
+    }
+}
+impl From<toml::de::Error> for Error {
+    fn from(f: toml::de::Error) -> Self {
+        ErrorKind::Invalid.cause(f).into()
+    }
+}
+impl From<toml::ser::Error> for Error {
+    fn from(f: toml::ser::Error) -> Self {
+        ErrorKind::Invalid.cause(f).into()
+    }
+}
+impl From<serde_json::Error> for Error {
+    fn from(f: serde_json::Error) -> Self {
+        ErrorKind::Invalid.cause(f).into()
+    }
+}
+impl From<rmp_serde::encode::Error> for Error {
+    fn from(f: rmp_serde::encode::Error) -> Self {
+        ErrorKind::Invalid.cause(f).into()
+    }
+}
+impl From<rmp_serde::decode::Error> for Error {
+    fn from(f: rmp_serde::decode::Error) -> Self {
+        ErrorKind::Invalid.cause(f).into()
+    }
+}
 
 /// A list of error kinds.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -19,33 +50,3 @@ pub enum ErrorKind {
     Other,
 }
 impl TrackableErrorKind for ErrorKind {}
-impl IntoTrackableError<io::Error> for ErrorKind {
-    fn into_trackable_error(e: io::Error) -> Error {
-        ErrorKind::Other.cause(e)
-    }
-}
-impl IntoTrackableError<toml::de::Error> for ErrorKind {
-    fn into_trackable_error(e: toml::de::Error) -> Error {
-        ErrorKind::Invalid.cause(e)
-    }
-}
-impl IntoTrackableError<toml::ser::Error> for ErrorKind {
-    fn into_trackable_error(e: toml::ser::Error) -> Error {
-        ErrorKind::Invalid.cause(e)
-    }
-}
-impl IntoTrackableError<serde_json::Error> for ErrorKind {
-    fn into_trackable_error(e: serde_json::Error) -> Error {
-        ErrorKind::Invalid.cause(e)
-    }
-}
-impl IntoTrackableError<rmp_serde::encode::Error> for ErrorKind {
-    fn into_trackable_error(e: rmp_serde::encode::Error) -> Error {
-        ErrorKind::Invalid.cause(e)
-    }
-}
-impl IntoTrackableError<rmp_serde::decode::Error> for ErrorKind {
-    fn into_trackable_error(e: rmp_serde::decode::Error) -> Error {
-        ErrorKind::Invalid.cause(e)
-    }
-}

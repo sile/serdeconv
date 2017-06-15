@@ -4,7 +4,7 @@ use std::path::Path;
 use serde::{Deserialize, Serialize};
 use toml;
 
-use Result;
+use {Result, Error};
 
 /// Converts from the TOML file to a value of `T` type.
 pub fn from_toml_file<T, P>(path: P) -> Result<T>
@@ -12,7 +12,7 @@ where
     T: for<'a> Deserialize<'a>,
     P: AsRef<Path>,
 {
-    let f = track_try!(File::open(path));
+    let f = track!(File::open(path).map_err(Error::from))?;
     track!(from_toml_reader(f))
 }
 
@@ -23,7 +23,7 @@ where
     R: Read,
 {
     let mut toml = String::new();
-    track_try!(reader.read_to_string(&mut toml));
+    track!(reader.read_to_string(&mut toml).map_err(Error::from))?;
     track!(from_toml_str(&toml))
 }
 
@@ -59,7 +59,7 @@ pub fn from_toml_str<'a, T>(toml: &'a str) -> Result<T>
 where
     T: Deserialize<'a>,
 {
-    let value = track_try!(toml::from_str(toml));
+    let value = track!(toml::from_str(toml).map_err(Error::from))?;
     Ok(value)
 }
 
@@ -68,7 +68,7 @@ pub fn from_toml_slice<'a, T>(toml: &'a [u8]) -> Result<T>
 where
     T: Deserialize<'a>,
 {
-    let value = track_try!(toml::from_slice(toml));
+    let value = track!(toml::from_slice(toml).map_err(Error::from))?;
     Ok(value)
 }
 
@@ -78,7 +78,7 @@ where
     T: ?Sized + Serialize,
     P: AsRef<Path>,
 {
-    let f = track_try!(File::create(path));
+    let f = track!(File::create(path).map_err(Error::from))?;
     track!(to_toml_writer(value, f))
 }
 
@@ -88,8 +88,8 @@ where
     T: ?Sized + Serialize,
     W: Write,
 {
-    let toml = track_try!(to_toml_string(value));
-    track_try!(writer.write_all(toml.as_bytes()));
+    let toml = track!(to_toml_string(value).map_err(Error::from))?;
+    track!(writer.write_all(toml.as_bytes()).map_err(Error::from))?;
     Ok(())
 }
 
@@ -124,6 +124,6 @@ pub fn to_toml_string<T>(value: &T) -> Result<String>
 where
     T: ?Sized + Serialize,
 {
-    let toml = track_try!(toml::to_string(value));
+    let toml = track!(toml::to_string(value).map_err(Error::from))?;
     Ok(toml)
 }

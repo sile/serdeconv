@@ -4,7 +4,7 @@ use std::path::Path;
 use serde::{Deserialize, Serialize};
 use serde_json;
 
-use Result;
+use {Result, Error};
 
 /// Converts from the JSON file to a value of `T` type.
 pub fn from_json_file<T, P>(path: P) -> Result<T>
@@ -12,7 +12,7 @@ where
     T: for<'a> Deserialize<'a>,
     P: AsRef<Path>,
 {
-    let f = track_try!(File::open(path));
+    let f = track!(File::open(path).map_err(Error::from))?;
     track!(from_json_reader(f))
 }
 
@@ -22,7 +22,7 @@ where
     T: for<'a> Deserialize<'a>,
     R: Read,
 {
-    let value = track_try!(serde_json::from_reader(reader));
+    let value = track!(serde_json::from_reader(reader).map_err(Error::from))?;
     Ok(value)
 }
 
@@ -31,7 +31,7 @@ pub fn from_json_str<'a, T>(json: &'a str) -> Result<T>
 where
     T: Deserialize<'a>,
 {
-    let value = track_try!(serde_json::from_str(json));
+    let value = track!(serde_json::from_str(json).map_err(Error::from))?;
     Ok(value)
 }
 
@@ -40,7 +40,7 @@ pub fn from_json_slice<'a, T>(json: &'a [u8]) -> Result<T>
 where
     T: Deserialize<'a>,
 {
-    let value = track_try!(serde_json::from_slice(json));
+    let value = track!(serde_json::from_slice(json).map_err(Error::from))?;
     Ok(value)
 }
 
@@ -50,7 +50,7 @@ where
     T: ?Sized + Serialize,
     P: AsRef<Path>,
 {
-    let f = track_try!(File::create(path));
+    let f = track!(File::create(path).map_err(Error::from))?;
     track!(to_json_writer(value, f))
 }
 
@@ -60,7 +60,7 @@ where
     T: ?Sized + Serialize,
     W: Write,
 {
-    let json = track_try!(serde_json::to_writer(writer, value));
+    let json = track!(serde_json::to_writer(writer, value).map_err(Error::from))?;
     Ok(json)
 }
 
@@ -70,7 +70,9 @@ where
     T: ?Sized + Serialize,
     W: Write,
 {
-    let json = track_try!(serde_json::to_writer_pretty(writer, value));
+    let json = track!(serde_json::to_writer_pretty(writer, value).map_err(
+        Error::from,
+    ))?;
     Ok(json)
 }
 
@@ -79,7 +81,7 @@ pub fn to_json_string<T>(value: &T) -> Result<String>
 where
     T: ?Sized + Serialize,
 {
-    let json = track_try!(serde_json::to_string(value));
+    let json = track!(serde_json::to_string(value).map_err(Error::from))?;
     Ok(json)
 }
 
@@ -88,6 +90,6 @@ pub fn to_json_string_pretty<T>(value: &T) -> Result<String>
 where
     T: ?Sized + Serialize,
 {
-    let json = track_try!(serde_json::to_string_pretty(value));
+    let json = track!(serde_json::to_string_pretty(value).map_err(Error::from))?;
     Ok(json)
 }
