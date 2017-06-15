@@ -8,8 +8,9 @@ use Result;
 
 /// Converts from the TOML file to a value of `T` type.
 pub fn from_toml_file<T, P>(path: P) -> Result<T>
-    where T: for<'a> Deserialize<'a>,
-          P: AsRef<Path>
+where
+    T: for<'a> Deserialize<'a>,
+    P: AsRef<Path>,
 {
     let f = track_try!(File::open(path));
     track!(from_toml_reader(f))
@@ -17,8 +18,9 @@ pub fn from_toml_file<T, P>(path: P) -> Result<T>
 
 /// Reads a TOML string from the reader and converts it to a value of `T` type.
 pub fn from_toml_reader<T, R>(mut reader: R) -> Result<T>
-    where T: for<'a> Deserialize<'a>,
-          R: Read
+where
+    T: for<'a> Deserialize<'a>,
+    R: Read,
 {
     let mut toml = String::new();
     track_try!(reader.read_to_string(&mut toml));
@@ -54,7 +56,8 @@ pub fn from_toml_reader<T, R>(mut reader: R) -> Result<T>
 /// # }
 /// ```
 pub fn from_toml_str<'a, T>(toml: &'a str) -> Result<T>
-    where T: Deserialize<'a>
+where
+    T: Deserialize<'a>,
 {
     let value = track_try!(toml::from_str(toml));
     Ok(value)
@@ -62,7 +65,8 @@ pub fn from_toml_str<'a, T>(toml: &'a str) -> Result<T>
 
 /// Converts from the TOML bytes to a value of `T` type.
 pub fn from_toml_slice<'a, T>(toml: &'a [u8]) -> Result<T>
-    where T: Deserialize<'a>
+where
+    T: Deserialize<'a>,
 {
     let value = track_try!(toml::from_slice(toml));
     Ok(value)
@@ -70,8 +74,9 @@ pub fn from_toml_slice<'a, T>(toml: &'a [u8]) -> Result<T>
 
 /// Converts the value to a TOML string and writes it to the speficied file.
 pub fn to_toml_file<T, P>(value: &T, path: P) -> Result<()>
-    where T: ?Sized + Serialize,
-          P: AsRef<Path>
+where
+    T: ?Sized + Serialize,
+    P: AsRef<Path>,
 {
     let f = track_try!(File::create(path));
     track!(to_toml_writer(value, f))
@@ -79,8 +84,9 @@ pub fn to_toml_file<T, P>(value: &T, path: P) -> Result<()>
 
 /// Converts the value to a TOML string and writes it to the writer.
 pub fn to_toml_writer<T, W>(value: &T, mut writer: W) -> Result<()>
-    where T: ?Sized + Serialize,
-          W: Write
+where
+    T: ?Sized + Serialize,
+    W: Write,
 {
     let toml = track_try!(to_toml_string(value));
     track_try!(writer.write_all(toml.as_bytes()));
@@ -115,7 +121,8 @@ pub fn to_toml_writer<T, W>(value: &T, mut writer: W) -> Result<()>
 /// # }
 /// ```
 pub fn to_toml_string<T>(value: &T) -> Result<String>
-    where T: ?Sized + Serialize
+where
+    T: ?Sized + Serialize,
 {
     let toml = track_try!(toml::to_string(value));
     Ok(toml)
