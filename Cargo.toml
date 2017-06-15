@@ -1,6 +1,6 @@
 [package]
 name = "serdeconv"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["Takeru Ohta <phjgt308@gmail.com>"]
 description = "This crate provides convenient traits and functions for converting between TOML/JSON/MessagePack strings and serializable values."
 documentation = "https://docs.rs/serdeconv"
