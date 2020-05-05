@@ -1,10 +1,10 @@
+use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
-use serde::{Deserialize, Serialize};
 use toml;
 
-use {Result, Error};
+use {Error, Result};
 
 /// Converts from the TOML file to a value of `T` type.
 pub fn from_toml_file<T, P>(path: P) -> Result<T>

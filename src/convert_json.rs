@@ -1,10 +1,10 @@
+use serde::{Deserialize, Serialize};
+use serde_json;
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
-use serde::{Deserialize, Serialize};
-use serde_json;
 
-use {Result, Error};
+use {Error, Result};
 
 /// Converts from the JSON file to a value of `T` type.
 pub fn from_json_file<T, P>(path: P) -> Result<T>
@@ -70,9 +70,7 @@ where
     T: ?Sized + Serialize,
     W: Write,
 {
-    let json = track!(serde_json::to_writer_pretty(writer, value).map_err(
-        Error::from,
-    ))?;
+    let json = track!(serde_json::to_writer_pretty(writer, value).map_err(Error::from,))?;
     Ok(json)
 }
 

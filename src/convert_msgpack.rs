@@ -1,10 +1,10 @@
+use rmp_serde;
+use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
-use serde::{Deserialize, Serialize};
-use rmp_serde;
 
-use {Result, Error};
+use {Error, Result};
 
 /// Converts from the MessagePack file to a value of `T` type.
 pub fn from_msgpack_file<T, P>(path: P) -> Result<T>
@@ -51,9 +51,7 @@ where
     T: ?Sized + Serialize,
     W: Write,
 {
-    track!(rmp_serde::encode::write(&mut writer, value).map_err(
-        Error::from,
-    ))?;
+    track!(rmp_serde::encode::write(&mut writer, value).map_err(Error::from,))?;
     Ok(())
 }
 
