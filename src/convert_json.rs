@@ -60,8 +60,8 @@ where
     T: ?Sized + Serialize,
     W: Write,
 {
-    let json = track!(serde_json::to_writer(writer, value).map_err(Error::from))?;
-    Ok(json)
+    track!(serde_json::to_writer(writer, value).map_err(Error::from))?;
+    Ok(())
 }
 
 /// Converts the value to a pretty printed JSON string and writes it to the writer.
@@ -70,8 +70,8 @@ where
     T: ?Sized + Serialize,
     W: Write,
 {
-    let json = track!(serde_json::to_writer_pretty(writer, value).map_err(Error::from,))?;
-    Ok(json)
+    track!(serde_json::to_writer_pretty(writer, value).map_err(Error::from,))?;
+    Ok(())
 }
 
 /// Converts the value to a JSON string.
