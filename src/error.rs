@@ -1,5 +1,6 @@
 use rmp_serde;
 use serde_json;
+use std;
 use std::io;
 use toml;
 use trackable::error::TrackableError;
@@ -35,6 +36,11 @@ impl From<rmp_serde::encode::Error> for Error {
 }
 impl From<rmp_serde::decode::Error> for Error {
     fn from(f: rmp_serde::decode::Error) -> Self {
+        ErrorKind::Invalid.cause(f).into()
+    }
+}
+impl From<std::str::Utf8Error> for Error {
+    fn from(f: std::str::Utf8Error) -> Self {
         ErrorKind::Invalid.cause(f).into()
     }
 }

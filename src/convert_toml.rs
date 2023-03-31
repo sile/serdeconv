@@ -1,7 +1,9 @@
+use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
+use std::str;
 use toml;
 
 use {Error, Result};
@@ -55,21 +57,20 @@ where
 /// assert_eq!(foo.baz, 123);
 /// # }
 /// ```
-pub fn from_toml_str<'a, T>(toml: &'a str) -> Result<T>
+pub fn from_toml_str<T>(toml: &str) -> Result<T>
 where
-    T: Deserialize<'a>,
+    T: DeserializeOwned,
 {
     let value = track!(toml::from_str(toml).map_err(Error::from))?;
     Ok(value)
 }
 
 /// Converts from the TOML bytes to a value of `T` type.
-pub fn from_toml_slice<'a, T>(toml: &'a [u8]) -> Result<T>
+pub fn from_toml_slice<T>(toml: &[u8]) -> Result<T>
 where
-    T: Deserialize<'a>,
+    T: DeserializeOwned,
 {
-    let value = track!(toml::from_slice(toml).map_err(Error::from))?;
-    Ok(value)
+    track!(from_toml_str(str::from_utf8(toml).map_err(Error::from)?))
 }
 
 /// Converts the value to a TOML string and writes it to the speficied file.
